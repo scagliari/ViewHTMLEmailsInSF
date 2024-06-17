@@ -10,7 +10,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
     SET @HTMLEmail = Lookup("MSR_Operations_DE_HTMLSendLog_20240617", "HTMLEmail", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
 
     IF NOT EMPTY(@HTMLEmail) THEN
-        Replace(@HTMLEmail, "href=", "")
+        SET @HTMLEmail = Replace(@HTMLEmail, "href=", "")
     ENDIF
 ENDIF
 ]%%
