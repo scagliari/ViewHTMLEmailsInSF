@@ -1,0 +1,103 @@
+%%[
+
+    SET @ActivityType = RequestParameter("ActivityType")
+    SET @ActivityName = RequestParameter("ActivityName")
+    IF @ActivityType == "Email" THEN
+        SET @View_Email_URL = Lookup("MSR_Operations_DE_ActiveJourneys_20240313", "View_Email_URL", "ActivityName", @ActivityName)
+        SET @SubjectLine = Lookup("MSR_Operations_DE_ActiveJourneys_20240313", "SubjectLine", "ActivityName", @ActivityName)
+        IF NOT EMPTY(@View_Email_URL) THEN
+
+            SET @EmailPreview = HTTPGet(@View_Email_URL)
+
+            IF INDEXOF(@EmailPreview, "https://click.sfdc.msrenewal.com/open.aspx?") > 0 THEN
+            SET @EmailPreview = Replace(@EmailPreview, "https://click.sfdc.msrenewal.com/open.aspx?", "")
+           ENDIF
+
+            SET @EmailPreview = TreatAsContent(@EmailPreview)
+        ENDIF
+    ELSE
+        SET @MessageText = Lookup("MSR_Operations_DE_ActiveJourneys_20240313", "MessageText", "ActivityName", @ActivityName)
+    ENDIF  
+    
+    IF @ActivityType == "LC SMS" THEN 
+      SET @LogoImage = "https://image.sfdc.msrenewal.com/lib/fe3b11717164047e771673/m/1/969aba7f-5f49-435d-b10c-dea10db2da91.png"
+    ELSE
+    SET @LogoImage = "https://image.sfdc.msrenewal.com/lib/fe3b11717164047e771673/m/1/fec1c7fd-0167-4fbc-be0b-1055ada2ed9f.png"  
+    ENDIF
+
+]%%
+
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MSR SFMC Custom Survey Login</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="https://mc44xj67dmqjm3p127xlr44g8ttq.pub.sfmc-content.com/y3lreusoo1q">
+    <link rel="icon" href="https://www.msrenewal.com/favicon-32x32.png">
+    <style>
+        .shadow {
+            background-color:#fff;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;"
+            min-width: 1500px !important;
+        }
+
+    </style>
+  </head>
+
+  <body>
+    %%[IF @ActivityType != "Email" THEN ]%%
+    <!-- Header -->
+    <div class="container-fluid">
+      <div class="row d-flex justify-content-center">
+        <div class="col-12 main text-center p-4 mb-4 ">
+          <a href="https://www.msrenewal.com/" target="_Blank">
+            <img class="logo" src="%%=v(@LogoImage)=%%" alt="MSR">
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- End of Header -->
+    %%[ ENDIF ]%%
+
+    %%[ IF @ActivityType == "Email" THEN ]%%
+    <!-- Email Header --
+    <div class="container mt-4 pt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 shadow" >
+             <b>Email Name: %%=v(@ActivityName)=%%</b><br>
+             <b>Subject Line:</b> %%=v(@SubjectLine)=%%<br>
+            </div>
+        </div>
+    </div>
+    Email Header -->
+    <!-- Email Preview -->
+    <div class="container-fluid pt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                %%=v(@EmailPreview)=%%          
+            </div>
+        </div>
+    </div>
+    <!--End of Email Preview -->
+    %%[ ELSE ]%%
+    <!-- Form -->
+    <div class="container ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 shadow" style="font-size: 18px;" >
+            <b>SMS Label:</b> %%=v(@ActivityName)=%%<br><br>
+            <b>SMS Message:</b> %%=v(@MessageText)=%%<br>
+            </div>
+        </div>
+    </div>
+    <!-- End of Form -->
+    %%[ ENDIF ]%%
+
+
+  </body>
+</html>
