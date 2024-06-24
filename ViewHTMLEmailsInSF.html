@@ -3,7 +3,11 @@
     Platform.Load("Core","1.1");
     var CookieValue =
     Platform.Function.Lookup('MSR_Operations_SFMCToSalesforceCookie_20240624','SFMCCookieValue','SFMCCookie','DisplayEmailsInSF');
-    Platform.Response.SetCookie("DisplayEmailsInSF", CookieValue, true);
+    var expiration = new Date();
+    // add a day
+    expiration.setDate(expiration.getDate() + 1);
+
+    Platform.Response.SetCookie("DisplayEmailsInSF", CookieValue, expiration, true);
  </script>
  <!-- End of Security Layer -->
 
