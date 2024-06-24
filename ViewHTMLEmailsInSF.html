@@ -1,11 +1,11 @@
-<!-- Security Layer --
+<!-- Security Layer -->
  <script runat="server">
     Platform.Load("Core","1.1");
     var CookieValue =
     Platform.Function.Lookup('MSR_Operations_SFMCToSalesforceCookie_20240624','SFMCCookieValue','SFMCCookie','DisplayEmailsInSF');
     Platform.Response.SetCookie("DisplayEmailsInSF", CookieValue, true);
  </script>
- -- End of Security Layer -->
+ <!-- End of Security Layer -->
 
  <!-- CloudPage Security Code -->
  <script runat="server">
