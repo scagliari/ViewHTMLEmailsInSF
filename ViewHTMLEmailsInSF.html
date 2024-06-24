@@ -4,9 +4,7 @@
     var CookieValue =
     Platform.Function.Lookup('MSR_Operations_SFMCToSalesforceCookie_20240624','SFMCCookieValue','SFMCCookie','DisplayEmailsInSF');
     var expiration = new Date();
-    // add a day
     expiration.setDate(expiration.getDate() + 1);
-
     Platform.Response.SetCookie("DisplayEmailsInSF", CookieValue, expiration, true);
  </script>
  <!-- End of Security Layer -->
@@ -63,7 +61,7 @@ ENDIF
     <div class="container-fluid pt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-12">
-                %%=v(@LoginSession)=%%
+                
                 %%=v(@HTMLEmail)=%%          
             </div>
         </div>
