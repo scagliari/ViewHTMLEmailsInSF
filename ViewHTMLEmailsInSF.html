@@ -50,12 +50,19 @@ ENDIF
   </head>
 
   <body>
+    %%[IF NOT EMPTY(@Disclaimer) THEN]%%
+    <div class="container-fluid pt-4 pb-2">
+      <div class="row d-flex justify-content-center">
+          <div class="col-10 text-center">
+            <span style="font-weight:bold;color:red;text-align:center;">
+              %%=v(@Disclaimer)=%%</span>         
+          </div>
+      </div>
+    </div>
+    %%[ ENDIF ]%%
     <div class="container-fluid pt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-12">
-              %%[IF NOT EMPTY(@Disclaimer) THEN]%%
-                <span style="font-weight:bold;color:red;">%%=v(@Disclaimer)=%%</span><br>
-              %%[ ENDIF ]%%
                 %%=v(@HTMLEmail)=%%          
             </div>
         </div>
