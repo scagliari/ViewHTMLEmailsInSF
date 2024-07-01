@@ -1,32 +1,3 @@
-<!-- Security Layer -->
- <script runat="server">
-    Platform.Load("Core","1.1");
-    var CookieValue =
-    Platform.Function.Lookup('MSR_Operations_SFMCToSalesforceCookie_20240624','SFMCCookieValue','SFMCCookie','DisplayEmailsInSF');
-    var expiration = new Date();
-    expiration.setDate(expiration.getDate() + 1);
-    Platform.Response.SetCookie("DisplayEmailsInSF", CookieValue, expiration, true);
- </script>
- <!-- End of Security Layer -->
-
- <!-- CloudPage Security Code -->
- <script runat="server">
-  Platform.Load("Core","1.1");
-  var CookieValue =
-  Platform.Function.Lookup('MSR_Operations_SFMCToSalesforceCookie_20240624','SFMCCookieValue','SFMCCookie','DisplayEmailsInSF');
-  var Cookie = Platform.Request.GetCookieValue('DisplayEmailsInSF');
-  if(Cookie && Cookie == CookieValue) {
-    var loginSession = "True"
-  } else 
-  {
-    var loginSession = "False"
-  }
-  Variable.SetValue("@LoginSession",loginSession);
-
-</script>
-  <!--End of CloudPage Security Code -->
-
-
 %%[
 
 SET @SubId = RequestParameter("SubId")
@@ -53,8 +24,9 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
       
     ENDIF
 
-
-    ENDIF
+ELSE
+  SET @Disclaimer = "Please make sure to add SubId, JobId and BatchId as parameters to view able to preview the email that the user received"
+ENDIF
 
 
     IF NOT EMPTY(@HTMLEmail) THEN
@@ -78,6 +50,7 @@ ENDIF
     <div class="container-fluid pt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-12">
+                %%=v(@Disclaimer)=%%
                 %%=v(@HTMLEmail)=%%          
             </div>
         </div>
