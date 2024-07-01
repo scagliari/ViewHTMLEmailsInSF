@@ -18,7 +18,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
         SET @HTMLWebEmail = HTTPGet(@View_Email_URL)
       
         IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
-          SET @Disclaimer = "Please note that this version of the email is based on real-time data and therefore may not accurately reflect the email that the user received at the time of send."
+          SET @Disclaimer = "Please note that this preview is based on real-time data and therefore may not accurately reflect the email that the user received at the time of send."
           SET @HTMLEmail = @HTMLWebEmail
         ENDIF
       ENDIF
