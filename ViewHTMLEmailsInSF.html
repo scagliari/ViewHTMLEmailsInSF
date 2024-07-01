@@ -44,8 +44,13 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
     SET @Disclaimer = "Please note that this version of the email is based on real-time data and may not accurately reflect the email the user received at the time it was sent."
     SET @View_Email_URL = Lookup("SendLog", "view_email_url", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
 
-    IF NOT EMPTY(@View_Email_URL) AND INDEXOF(@View_Email_URL, "This link has expired") == 0 AND INDEXOF(@View_Email_URL, "The system is temporarily unavailable") == 0 THEN
-      SET @HTMLEmail = HTTPGet(@View_Email_URL) 
+    IF NOT EMPTY(@View_Email_URL) THEN
+      SET @HTMLWebEmail = HTTPGet(@View_Email_URL)
+      
+      IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
+        SET @HTMLEmail = @HTMLWebEmail
+      ENDIF
+      
     ENDIF
 
 
