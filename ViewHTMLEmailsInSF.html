@@ -12,16 +12,16 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
 
     /* Second HTML Email We'll try to retrieve from the SendLog */
     IF EMPTY(@HTMLEmail) THEN
-    SET @View_Email_URL = Lookup("SendLog", "view_email_url", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
+      SET @View_Email_URL = Lookup("SendLog", "view_email_url", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
 
-    IF NOT EMPTY(@View_Email_URL) THEN
-      SET @HTMLWebEmail = HTTPGet(@View_Email_URL)
+      IF NOT EMPTY(@View_Email_URL) THEN
+        SET @HTMLWebEmail = HTTPGet(@View_Email_URL)
       
-      IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
-        SET @Disclaimer = "Please note that this version of the email is based on real-time data and may not accurately reflect the email the user received at the time it was sent."
-        SET @HTMLEmail = @HTMLWebEmail
+        IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
+          SET @Disclaimer = "Please note that this version of the email is based on real-time data and may not accurately reflect the email the user received at the time it was sent."
+          SET @HTMLEmail = @HTMLWebEmail
+        ENDIF
       ENDIF
-      
     ENDIF
 
 ELSE
