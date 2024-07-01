@@ -27,8 +27,6 @@
   <!--End of CloudPage Security Code -->
 
 
-
-
 %%[
 
 SET @SubId = RequestParameter("SubId")
@@ -38,7 +36,20 @@ SET @BatchId = RequestParameter("BatchId")
 /* First HTML Email We'll try to retrieve */
 
 IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
-    SET @HTMLEmail = Lookup("MSR_Operations_DE_HTMLSendLog_20240617", "HTMLEmail", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
+    SET @HTMLEmail = Lookup("MSR_Operations_DE_HTMLSendLog_20240617", "HTMLEmail", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId, 'HTMLRendered', 'true')
+
+
+    /* Second HTML Email We'll try to retrieve from the SendLog */
+    IF EMPTY(@HTMLEmail) THEN
+    SET @View_Email_URL = Lookup("SendLog", "view_email_url", "SubID", @SubId, "JobID", @JobId, "BatchId", @BatchId)
+
+    IF NOT EMPTY(@View_Email_URL) THEN
+      SET @HTMLEmail = HTTPGet(@View_Email_URL) 
+    ENDIF
+
+
+    ENDIF
+
 
     IF NOT EMPTY(@HTMLEmail) THEN
         SET @HTMLEmail = Replace(@HTMLEmail, "href=", "")
@@ -61,7 +72,6 @@ ENDIF
     <div class="container-fluid pt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-12">
-                
                 %%=v(@HTMLEmail)=%%          
             </div>
         </div>
