@@ -26,7 +26,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
 
     /* Cleaning Up HTML to remove links and track email open snippet */
     IF NOT EMPTY(@HTMLEmail) THEN
-      SET @HTMLEmail = Replace(@HTMLEmail, "href=", "")
+      SET @HTMLEmail = Replace(@HTMLEmail, "href=", "style="text-decoration:underline;")
     ELSE 
       SET @Disclaimer = "Unfortunately, we're not able to show a version of this email. Please reach out to the Marketing Automation team for more details."  
     ENDIF
