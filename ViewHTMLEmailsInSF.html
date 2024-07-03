@@ -30,6 +30,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
           /* Second Backup to get EmailId via EmailName */
           IF EMPTY(@EmailId) THEN
             SET @EmailId = Lookup('MSR_Operations_DE_JobDataView_20240701', 'EmailId', 'EmailName', @EmailName)
+          ENDIF
 
             IF NOT EMPTY(@EmailId) THEN ]%%
             <script runat="server">
