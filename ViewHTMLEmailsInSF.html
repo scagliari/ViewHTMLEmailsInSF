@@ -21,6 +21,68 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
           SET @Disclaimer = "Please note that this preview is based on real-time data and therefore may not accurately reflect the email that the user received at the time of send."
           SET @HTMLEmail = @HTMLWebEmail
         ENDIF
+
+        /* Third Backup - Previewing the email based on dummy data */
+        IF EMPTY(@HTMLEmail) THEN
+          SET @EmailName = Lookup('SendLog', 'EmailName_', 'JobId', @JobId)
+          SET @EmailId = Lookup('MSR_Operations_DE_JobDataView_20240701', 'EmailId', 'JobId', @JobId)
+          /* Second Backup to get EmailId via EmailName */
+          IF EMPTY(@EmailId) THEN
+            SET @EmailId = Lookup('MSR_Operations_DE_JobDataView_20240701', 'EmailId', 'EmailName', @EmailName)
+
+            IF NOT EMPTY(@EmailId) THEN ]%%
+            <script runat="server">
+              Platform.Load("Core", "1");
+              /* This is the script to preview the email based on EmailId */
+              var authEndpoint = 'https://mc44xj67dmqjm3p127xlr44g8ttq.auth.marketingcloudapis.com'  
+              var payload = {
+                            client_id: "r9en4z69wajj9g2uqtmig2uv",            
+                            client_secret: "ekHFNFsiUb5m0mVa6naLVvRE",     
+                            grant_type: "client_credentials"
+                        };
+          
+              var url = authEndpoint + '/v2/token'
+              var contentType = 'application/json'
+          
+              var accessTokenRequest = HTTP.Post(url, contentType, Stringify(payload));
+              if (accessTokenRequest.StatusCode == 200) {
+                   var tokenResponse = Platform.Function.ParseJSON(accessTokenRequest.Response[0]);
+                   var accessToken = tokenResponse.access_token
+                   var rest_instance_url = tokenResponse.rest_instance_url
+                  };
+             
+             
+              if (accessToken != null) {
+                  
+               var subscriberKey = '0034u00002dzuLKAAY';
+               var deKey = 'F45C6407-C124-47E2-BC78-57E5A0C3664A';
+               var emailId = Variable.GetValue("@EmailId");
+               var headerNames = ["Authorization"];
+               var headerValues = ["Bearer " + accessToken];
+               var requestUrl = rest_instance_url + "guide/v1/emails/" + emailId + "/dataExtension/key:" + deKey + "/contacts/key:" + subscriberKey + "/preview";
+               var jsonBody = ""
+               
+               try {
+                
+               var previewEmail = HTTP.Post(requestUrl, contentType, jsonBody, headerNames, headerValues);
+                      var response = Platform.Function.ParseJSON(previewEmail.Response[0])
+                      var emailPreviewResult = response.message.views[0].content.toString();
+                      var disclaimer = "Unfortunately we're not able to show the email that the user received so instead we're showing a preview of that email based on dummy data"
+              
+                      Variable.SetValue("@HTMLEmail",emailPreviewResult);
+                      Variable.SetValue("@Disclaimer",disclaimer);
+                    
+                }   catch(error)
+                {        
+                  Platform.Function.UpsertData("EmailsToSF_SSJS_ErrorLog",["EmailId"],[emailId],["Error"],["Email Preview Failed"]);
+          
+                }     
+              };
+           </script>
+            %%[
+            ENDIF
+          ENDIF
+        ENDIF
       ENDIF
     ENDIF
 
