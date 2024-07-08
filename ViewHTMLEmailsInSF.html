@@ -38,7 +38,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
 
           /* Third Backup to get Legacy Emails from Legacy Emails DE */
           IF EMPTY(@EmailId) THEN
-            SET @EmailId = Lookup('MSR_Operations_DE_JobLegacyEmails_20240701', 'EmailId', 'EmailName', @EmailName)
+            SET @EmailId = Lookup('MSR_Operations_DE_JobLegacyEmails_20240708', 'EmailId', 'EmailName', @EmailName)
           ENDIF
 
 
