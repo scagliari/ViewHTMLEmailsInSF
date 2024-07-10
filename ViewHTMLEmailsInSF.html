@@ -69,6 +69,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
                var subscriberKey = '0034u00002dzuLKAAY';
                var deKey = 'F45C6407-C124-47E2-BC78-57E5A0C3664A';
                var emailId = Variable.GetValue("@EmailId");
+               var emailName = Variable.GetValue("@EmailName");
                var headerNames = ["Authorization"];
                var headerValues = ["Bearer " + accessToken];
                var requestUrl = rest_instance_url + "guide/v1/emails/" + emailId + "/dataExtension/key:" + deKey + "/contacts/key:" + subscriberKey + "/preview";
@@ -86,7 +87,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
                     
                 }   catch(error)
                 {        
-                  Platform.Function.UpsertData("EmailsToSF_SSJS_ErrorLog",["EmailId"],[emailId],["Error"],["Email Preview Failed"]);
+                  Platform.Function.UpsertData("EmailsToSF_SSJS_ErrorLog",["EmailId"],[emailId],["Error", "EmailName"],["Email Preview Failed", EmailName]);
           
                 }     
               };
