@@ -87,7 +87,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
                     
                 }   catch(error)
                 {        
-                  Platform.Function.UpsertData("EmailsToSF_SSJS_ErrorLog",["EmailId"],[emailId],["Error", "EmailName"],["Email Preview Failed", EmailName]);
+                  Platform.Function.UpsertData("EmailsToSF_SSJS_ErrorLog",["EmailId"],[emailId],["Error", "EmailName"],["Email Preview Failed", emailName]);
           
                 }     
               };
