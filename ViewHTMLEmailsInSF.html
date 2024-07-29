@@ -20,7 +20,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
         SET @EmailName = Lookup("SendLog", "EmailName_", "JobID", @JobId)
       
         IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
-          SET @Disclaimer = "Please note that this email preview is generated using real-time data and may not accurately reflect the exact content received by the user at the time of the original send."
+          SET @Disclaimer = "Please note that this email preview is generated using real-time data and may not accurately reflect the exact content received by the user at the time of the original send. Dynamic content such as balances or personalized information may have changed since the email was sent."
           SET @HTMLEmail = @HTMLWebEmail
         ENDIF
       ENDIF  
