@@ -20,7 +20,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
         SET @EmailName = Lookup("SendLog", "EmailName_", "JobID", @JobId)
       
         IF INDEXOF(@HTMLWebEmail, "This link has expired") == 0 AND INDEXOF(@HTMLWebEmail, "The system is temporarily unavailable") == 0 THEN
-          SET @Disclaimer = "Please note that this preview is based on real-time data and therefore may not accurately reflect the email that the user received at the time of send."
+          SET @Disclaimer = "Please note that this email preview is generated using real-time data and may not accurately reflect the exact content received by the user at the time of the original send."
           SET @HTMLEmail = @HTMLWebEmail
         ENDIF
       ENDIF  
@@ -80,7 +80,7 @@ IF NOT EMPTY(@SubId) AND NOT EMPTY(@JobId) AND NOT EMPTY(@BatchId) THEN
                var previewEmail = HTTP.Post(requestUrl, contentType, jsonBody, headerNames, headerValues);
                       var response = Platform.Function.ParseJSON(previewEmail.Response[0])
                       var emailPreviewResult = response.message.views[0].content.toString();
-                      var disclaimer = "Unfortunately we're not able to show the email that the user received so instead we're showing a preview of that email based on dummy data"
+                      var disclaimer = "We are unable to display the exact email the user received as the original content is no longer available. This preview is generated using the current email template with test data, and may not accurately represent the specific details and dynamic content of the original email."
               
                       Variable.SetValue("@HTMLEmail",emailPreviewResult);
                       Variable.SetValue("@Disclaimer",disclaimer);
