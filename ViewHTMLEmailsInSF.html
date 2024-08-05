@@ -6,6 +6,8 @@
   </script>
 %%[
 
+SET @referrer = RequestParameter("HTTP_REFERRER")
+
 SET @SubId = RequestParameter("SubId")
 SET @JobId = RequestParameter("JobId")
 SET @BatchId = RequestParameter("BatchId")
@@ -152,7 +154,8 @@ ENDIF
         <div class="row d-flex justify-content-center">
             <div class="col-12">               
                 %%=v(@HTMLEmail)=%% 
-                %%=v(@IPAddress)=%%         
+                %%=v(@IPAddress)=%%<br>
+                %%=v(@referrer)=%%           
             </div>
         </div>
     </div>
