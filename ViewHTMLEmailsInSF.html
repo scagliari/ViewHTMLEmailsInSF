@@ -7,6 +7,7 @@
 %%[
 
 SET @referrer = HTTPRequestHeader("Referer")
+/* https://amherst.lightning.force.com/ */
 
 SET @SubId = RequestParameter("SubId")
 SET @JobId = RequestParameter("JobId")
@@ -140,7 +141,7 @@ ENDIF
   </head>
 
   <body>
-    %%[ IF IndexOf(@referrer, "amherst") > 0 THEN]%%
+    %%[ IF IndexOf(@referrer, "amherst.lightning") > 0 THEN]%%
     %%[IF NOT EMPTY(@Disclaimer) THEN]%%
     <div class="container-fluid pt-4 pb-2">
       <div class="row d-flex justify-content-center">
@@ -154,8 +155,7 @@ ENDIF
     <div class="container-fluid pt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-12">               
-                %%=v(@HTMLEmail)=%% 
-                %%=v(@referrer)=%%           
+                %%=v(@HTMLEmail)=%%           
             </div>
         </div>
     </div>
