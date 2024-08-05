@@ -6,7 +6,7 @@
   </script>
 %%[
 
-SET @referrer = RequestParameter("HTTP_REFERRER")
+SET @referrer = HTTPRequestHeader("Referer")
 
 SET @SubId = RequestParameter("SubId")
 SET @JobId = RequestParameter("JobId")
